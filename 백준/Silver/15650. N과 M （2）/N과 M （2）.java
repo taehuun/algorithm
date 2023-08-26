@@ -1,31 +1,39 @@
 import java.util.*;
 import java.io.*;
 public class Main {
-	static int n, m;
-	static int[] numbers;
-	public static void main(String[] args) throws IOException{
-		// TODO Auto-generated method stub
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		n = Integer.parseInt(st.nextToken());
-		m = Integer.parseInt(st.nextToken());
-		numbers = new int[m];
-		combi(0, 1);
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st = null;
+	static StringBuilder sb = new StringBuilder();
+	static int N, M, numbers[];
+	static boolean visit[];
+	static void init() throws IOException{
+		st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		numbers = new int[M];
+		visit = new boolean[N+1];
 	}
-	private static void combi(int cnt, int start) {
-		// TODO Auto-generated method stub
-		if(cnt == m) {
-			for (int i = 0; i <m; i++) {
-				System.out.print(numbers[i]+" ");
+	
+	static void prem(int cnt, int start) {
+		if(cnt == M) {
+			for (int i = 0; i < M; i++) {
+				System.out.print(numbers[i] + " ");
 			}
 			System.out.println();
 			return;
 		}
-		
-		for (int i = start; i <= n; i++) {
+		for (int i = start; i <= N; i++) {
+			if(visit[i]) continue;
+			visit[i] = true;
 			numbers[cnt] = i;
-			combi(cnt+1, i+1);
+			prem(cnt+1, i+1);
+			visit[i] = false;
 		}
+	}
+	
+	public static void main(String[] args) throws IOException{
+		init();
+		prem(0, 1);
 	}
 
 }
