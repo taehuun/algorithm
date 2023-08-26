@@ -1,0 +1,43 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st = null;
+	static StringBuilder sb = new StringBuilder();
+	static int N, M, numbers[];
+	static boolean visit[];
+	static void init() throws IOException{
+		st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		numbers = new int[M];
+		visit = new boolean[N+1];
+	}
+	
+	static void prem(int cnt, int start) {
+		if(cnt == M) {
+			for (int i = 0; i < M; i++) {
+				sb.append(numbers[i]).append(" ");
+			}
+			sb.append("\n");
+			return;
+		}
+		for (int i = start; i <= N; i++) {
+//			if(visit[i]) continue;
+//			visit[i] = true;
+			numbers[cnt] = i;
+			prem(cnt+1, i);
+//			visit[i] = false;
+		}
+	}
+	
+	public static void main(String[] args) throws IOException{
+		init();
+		prem(0, 1);
+		System.out.println(sb);
+	}
+
+}
