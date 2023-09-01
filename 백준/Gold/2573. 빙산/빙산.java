@@ -1,25 +1,24 @@
 import java.util.*;
 import java.io.*;
-class point{
-	int x;
-	int y;
-	public point(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-	public String toString() {
-		return this.x+" "+this.y;
-	}
-}
 public class Main {
+	static class point{
+		int x;
+		int y;
+		public point(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+		public String toString() {
+			return this.x+" "+this.y;
+		}
+	}
 	/*
 	 * 맵으로 일단 입력 받음.
-	 * while(possible){
 	 * for문 돌려서 첫 시작 x, y 저장
-	 * dfs 들어가서 다 연결 되어 있는지 확인
-	 * 다 연결 안되어 잇으면 possible false로 끝냄
-	 * 연결 되어 있으면 start_x, start_y로 bfs? dfs로 확인
-	 * 들어가서 4방 탐색해서 0으로 되어 있으면 count 추가하고 매개변수로 넘겨주고
+	 * 근데 첫 시작 x, y가 0이면 빙판이 없거나 전부 녹아서 없어진 경우다
+	 * 그럴땐 0을 리턴
+	 * bfs 들어가서 다 연결 되어 있는지 확인
+	 * 연결 되어 있으면 start_x, start_y로 bfs로 빙판 녹이기
 	 * 
 	 */
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -46,18 +45,18 @@ public class Main {
 	
 	static int solve() {
 		
-		int count = 0;
+		int year = 0;		//몇년 걸리는지 정답 담을곳
 		while(true) {
-			start_x = 0;
+			start_x = 0;		//매번 초기화 하는 이유는 전부 녹아 없어지는 경우때문에
 			start_y = 0;
 			start_check();
 			if(start_x == 0 && start_y == 0) return 0;
 			visit = new boolean[N][M];
 			if(bingsize() != bfs_line(start_x, start_y)) 
-					return count;
+					return year;
 			visit = new boolean[N][M];
 			bfs(start_x, start_y);	//빙판 녹이는 메소드
-			count++;
+			year++;
 		}
 		
 	}
