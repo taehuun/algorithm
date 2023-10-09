@@ -1,14 +1,8 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Solution {
+
 	static class point {
 		int x, y, num, dir;
 
@@ -41,95 +35,85 @@ public class Solution {
 	static StringTokenizer st = null;
 	static StringBuilder sb = new StringBuilder();
 	static int N, M, K, sum;
-	static ArrayList<point> microbe;
+	static List<point> microbe;
 
 	static void init() throws IOException {
 		st = new StringTokenizer(br.readLine(), " ");
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 		K = Integer.parseInt(st.nextToken());
-		// 세로위치, 가로위치, 미생물 수, 이동방향
 		microbe = new ArrayList<>();
 		sum = 0;
-
 		for (int i = 0; i < K; i++) {
 			st = new StringTokenizer(br.readLine(), " ");
 			microbe.add(new point(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()),
 					Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
 		}
+
 	}
 
 	static void solve() {
-		for (int time = 0; time < M; time++) {
-			for (int i = 0; i < microbe.size(); i++) {
-				microbe.get(i).move(microbe.get(i).dir);
+		// 움직이고, 테두리 절반으로, 방향바꾸고, 합칠거 합치고, 삭제하고
+		while (M-- > 0) {
+			// 1. move
+			for (point p : microbe) {
+				p.move(p.dir);
 			}
-			renewal(microbe);
+			// 2. 테두리 절반으로
+			for (point p : microbe) {
+				if (p.x == 0 || p.x == N - 1 || p.y == 0 || p.y == N - 1) {
+					p.num /= 2;
+
+					// 3. 방향 바꾸고
+					switch (p.dir) {
+					case 1:
+						p.dir = 2;
+						break; // 상 -> 하
+					case 2:
+						p.dir = 1;
+						break; // 하 -> 상
+					case 3:
+						p.dir = 4;
+						break; // 좌 -> 우
+					case 4:
+						p.dir = 3;
+						break; // 우 -> 좌
+					}
+				}
+			}
+			// 4. 합친다.
+			Map<String, List<point>> map = new HashMap<>();
+			for (point p : microbe) {
+				String key = p.x + "," + p.y;
+				if (!map.containsKey(key)) {
+					map.put(key, new ArrayList<>());
+				}
+				map.get(key).add(p);
+			}
+			microbe.clear();
+
+			for (String key : map.keySet()) {
+				List<point> list = map.get(key);
+				if (list.size() == 1) {
+					microbe.add(list.get(0));
+					continue;
+				}
+				list.sort((o1, o2) -> Integer.compare(o2.num, o1.num));
+
+				for (int i = 1; i < list.size(); i++) {
+					list.get(0).num += list.get(i).num;
+				}
+				microbe.add(list.get(0));
+			}
 		}
-		for (int i = 0; i < microbe.size(); i++) {
-			sum += microbe.get(i).num;
+		for (point p : microbe) {
+			sum += p.num;
 		}
 		sb.append(sum);
 	}
 
-	private static void renewal(List<point> microbe) {
-
-		for (int i = microbe.size() - 1; i >= 0; i--) {
-			point m = microbe.get(i);
-			if (m.x == 0 || m.y == 0 || m.x == N - 1 || m.y == N - 1) {
-
-				switch (m.dir) {
-				case 1:
-					m.dir = 2;
-					break;
-				case 2:
-					m.dir = 1;
-					break;
-				case 3:
-					m.dir = 4;
-					break;
-				case 4:
-					m.dir = 3;
-					break;
-
-				}
-
-				microbe.get(i).num /= 2;
-
-			}
-		}
-		// 삭제 부분
-		Map<String, List<point>> map = new HashMap<>();
-		
-		for (point p : microbe) {
-			String key = p.x + ","+p.y;
-			
-			if(!map.containsKey(key)) {
-				map.put(key, new ArrayList<>());
-			}
-			map.get(key).add(p);
-		}
-		microbe.clear();
-		
-		for (String key : map.keySet()) {
-			List<point> list = map.get(key);
-			
-			if(list.size() == 1) {
-				microbe.add(list.get(0));
-				continue;
-			}
-			
-			list.sort((p1, p2) -> Integer.compare(p2.num, p1.num));
-			
-			for (int i = 1; i < list.size(); i++) {
-				list.get(0).num += list.get(i).num;
-			}
-			microbe.add(list.get(0));
-		}
-
-	}
-
 	public static void main(String[] args) throws IOException {
+
 		int T = Integer.parseInt(br.readLine());
 		for (int t = 1; t <= T; t++) {
 			sb.append("#").append(t).append(" ");
