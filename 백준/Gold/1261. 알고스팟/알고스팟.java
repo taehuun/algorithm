@@ -2,13 +2,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
-import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
 
-	static int dx[] = { -1, 1, 0, 0 };
+	static int dx[] = { 1, -1, 0, 0 };
 	static int dy[] = { 0, 0, -1, 1 };
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 	static StringTokenizer st = null;
@@ -34,7 +32,7 @@ public class Main {
 
 	static void solve() {
 
-		Queue<int[]> que = new PriorityQueue<>((o1, o2) -> Integer.compare(o1[2], o2[2]));
+		ArrayDeque<int[]> que = new ArrayDeque<>();
 		que.offer(new int[] { 0, 0, 0 }); // x, y, shoot
 		visit[0][0] = true;
 		while (!que.isEmpty()) {
@@ -45,24 +43,22 @@ public class Main {
 
 			if (x == M - 1 && y == N - 1) {
 				shoot = sh;
-				return;
+				break;
 			}
 
 			for (int i = 0; i < 4; i++) {
 				int nx = x + dx[i];
 				int ny = y + dy[i];
 
-				if (check(nx, ny))
-					continue;
-				if (visit[nx][ny])
+				if (check(nx, ny) || visit[nx][ny])
 					continue;
 
 				visit[nx][ny] = true;
 
 				if (map[nx][ny] == 1) {
-					que.offer(new int[] { nx, ny, sh + 1 });
+					que.offerLast(new int[] { nx, ny, sh + 1 });
 				} else {
-					que.offer(new int[] { nx, ny, sh });
+					que.offerFirst(new int[] { nx, ny, sh });
 				}
 			}
 		}
