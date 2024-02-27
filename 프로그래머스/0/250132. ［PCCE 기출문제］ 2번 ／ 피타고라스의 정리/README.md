@@ -1,10 +1,10 @@
 # [level 0] [PCCE 기출문제] 2번 / 피타고라스의 정리 - 250132 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/250132?language=java) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/250132?language=python3) 
 
 ### 성능 요약
 
-메모리: 71.2 MB, 시간: 138.35 ms
+메모리: 7.46 MB, 시간: 16.00 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2024년 02월 27일 14:13:48
+2024년 02월 27일 14:14:38
 
 ### 문제 설명
 
