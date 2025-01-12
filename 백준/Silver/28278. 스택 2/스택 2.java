@@ -7,7 +7,8 @@ import java.util.StringTokenizer;
 public class Main {
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static Stack<String> stack;
+    static StringBuilder sb = new StringBuilder();
+    static Stack<Integer> stack;
     static int N;
 
     static void init() throws IOException {
@@ -17,42 +18,48 @@ public class Main {
         N = Integer.parseInt(br.readLine());
 
         for(int i=0; i<N; i++){
-            String a = br.readLine();
-            solution(a);
+            solution(br.readLine());
         }
     }
 
     static void solution(String a) {
 
-        if(a.length() == 1){
-            if(a.equals("2")){
-                if(stack.empty()){
-                    System.out.println(-1);
-                }else {
-                    System.out.println(stack.pop());
-                }
-            }else if(a.equals("3")){
-                System.out.println(stack.size());
-            }else if (a.equals("4")){
+        char chr = a.charAt(0);
+
+        switch (chr){
+
+            case '1' :
+                stack.push(Integer.parseInt(a.substring(2)));
+                break;
+            case '2' :
                 if(stack.empty())
-                    System.out.println(1);
+                    sb.append(-1);
                 else
-                    System.out.println(0);
-            }else if (a.equals("5")){
-                if(stack.empty()){
-                    System.out.println(-1);
-                }else {
-                    System.out.println(stack.peek());
-                }
-            }
-        }
-        //1경우
-        else {
-            stack.add(a.substring(2));
+                    sb.append(stack.pop());
+                sb.append("\n");
+                break;
+            case '3' :
+                sb.append(stack.size()).append("\n");
+                break;
+            case '4' :
+                if(stack.empty())
+                    sb.append(1);
+                else
+                    sb.append(0);
+                sb.append("\n");
+                break;
+            case '5' :
+                if(stack.empty())
+                    sb.append(-1);
+                else
+                    sb.append(stack.peek());
+                sb.append("\n");
+                break;
         }
     }
 
     public static void main(String[] args) throws IOException {
         init();
+        System.out.println(sb);
     }
 }
