@@ -6,44 +6,53 @@ public class Main {
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringBuilder sb = new StringBuilder();
-
+    static char[] map;
     static void solution() throws IOException {
 
-        String str;
-        while ((str = br.readLine()) != null) { // EOF 처리
-            if (str.trim().isEmpty()) { // 빈 줄 무시
-                continue;
+        String str = "";
+
+        while((str = br.readLine()) != null && !str.isEmpty())  {
+            int n = Integer.parseInt(str.trim());
+
+            //전체 길이 구하기
+            int len = (int)Math.pow(3, n);
+            map = new char[len];
+
+            for(int i=0; i<len; i++) {
+                map[i] = ' ';
             }
+            go(len, 0);
 
-            sb.setLength(0);
-            int n = Integer.parseInt(str.trim()); // 공백 제거 후 변환
-
-            int len = (int) Math.pow(3, n);
-            // 전체 길이 '-'로 초기화
-            for (int i = 0; i < len; i++) {
-                sb.append("-");
+            for(int i=0; i<len; i++) {
+                sb.append(map[i]);
             }
-
-            // 칸토어 집합 생성
-            go(0, len);
-            System.out.println(sb);
+            sb.append("\n");
+        }
+        // 마지막 개행 문자 제거 (sb가 비어 있지 않을 경우만)
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
         }
     }
 
-    static void go(int start, int size) {
-        if (size < 3) return;
+    static void go (int size, int start) {
 
-        int newSize = size / 3;
-
-        for (int i = start + newSize; i < start + newSize * 2; i++) {
-            sb.setCharAt(i, ' ');
+        if (size == 1){
+            map[start] = '-';
+            return;
         }
 
-        go(start, newSize);
-        go(start + newSize * 2, newSize);
+        for (int i=0; i<3; i++) {
+
+            if(i==1) continue;
+
+            go(size/3, start+(i*size/3));
+        }
+
     }
 
     public static void main(String[] args) throws IOException {
+
         solution();
+        System.out.println(sb);
     }
 }
